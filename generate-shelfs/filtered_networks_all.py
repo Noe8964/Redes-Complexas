@@ -10,20 +10,24 @@ data = {"abide":    {"control": [], "patient": []},
         "ppmi":     {"control": [], "patient": []}, 
         "taowu":    {"control": [], "patient": []}}
 
-shelf = shelve.open("./shelfs/all_subjects")
-all_subjects = shelf["data"]
-shelf.close()
-
 shelf = shelve.open("./shelfs/ratios")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-for data_set in ["abide", "neurocon", "ppmi", "taowu"]:
-    for type in ["control", "patient"]:
-        aux = pd.DataFrame(all_subjects[data_set][type])
-        aux = aux.apply(lambda x : np.where(x == 1, 0, x))
-        for threshold in thresholds:
-            data[data_set][type].append(nx.from_pandas_adjacency(aux.apply(lambda x : np.where(x < threshold, 0, x))))
+for data_set in ["abide" ]:
+    for type in ["control"]:
+        base_path = "./data/" + data_set + "/" + type + "/"
+        for subject in os.listdir(base_path):
+            subject_path = base_path + "/" + subject + "/"
+            for file in os.listdir(subject_path):
+                if "AAL116_correlation_matrix" in file:
+                    aux = pd.DataFrame(scipy.io.loadmat(subject_path + file)["data"])
+                    aux = aux.apply(lambda x : np.where(x == 1, 0, x))
+                    subject_filtered_networks = []
+                    for threshold in thresholds:
+                        subject_filtered_networks.append(nx.from_pandas_adjacency(aux.apply(lambda x : np.where(x < threshold, 0, x))))
+                    data[data_set][type].append(subject_filtered_networks)
+                    break
 
 shelf = shelve.open("./shelfs/filtered_networks_all")
 shelf["data"] = data
