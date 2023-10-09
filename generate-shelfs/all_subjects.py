@@ -18,6 +18,6 @@ for data_set in ["abide", "neurocon", "ppmi", "taowu"]:
                     data[data_set][type].append(nx.Graph(scipy.io.loadmat(subject_path + file)["data"]))
                     break
 
-file = shelve.open("./shelfs/shelf-all-subjects")
+file = shelve.open("./shelfs/all_subjects")
 file["data"] = data
 file.close()
