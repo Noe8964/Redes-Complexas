@@ -21,9 +21,6 @@ for threshold_i in range(len(thresholds)):
     ratios_mean["control"].append(sum["control"] / n)
     ratios_mean["patient"].append(sum["patient"] / n)
 
-plt.plot(thresholds, ratios_mean["control"], marker="o", label="control")
-plt.plot(thresholds, ratios_mean["patient"], marker="o", label="patient")
-plt.legend()
-plt.xlabel("threshold")
-plt.ylabel("fraction of nodes in giant component")
-plt.show()
+shelf = shelve.open("./shelfs/ratios_mean")
+shelf["data"] = ratios_mean
+shelf.close()

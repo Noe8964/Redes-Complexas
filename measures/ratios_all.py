@@ -18,7 +18,6 @@ for subject in filtered_networks_abide_control["abide"]["control"]:
         subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
     ratios["control"].append(subject_ratios)
 
-
 for subject in filtered_networks_abide_patient["abide"]["patient"]:
     subject_ratios = []
     for network in subject:

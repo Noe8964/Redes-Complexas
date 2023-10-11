@@ -2,7 +2,7 @@ import shelve
 import networkx as nx
 
 shelf = shelve.open("./shelfs/filtered_networks")
-filtered_networks = shelf["data"]
+ratios_mean = shelf["data"]
 shelf.close()
 
 ratios = {"control": [], "patient": []}
@@ -15,3 +15,4 @@ for type in ["control", "patient"]:
 shelf = shelve.open("./shelfs/ratios")
 shelf["data"] = ratios
 shelf.close()
+

@@ -10,7 +10,7 @@ data = {"abide":    {"control": [], "patient": []},
         "ppmi":     {"control": [], "patient": []}, 
         "taowu":    {"control": [], "patient": []}}
 
-shelf = shelve.open("./shelfs/ratios")
+shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
@@ -29,6 +29,6 @@ for data_set in ["abide"]:
                     data[data_set][type].append(subject_filtered_networks)
                     break
 
-shelf = shelve.open("./shelfs/filtered_networks_abide_patient")
-shelf["data"] = data
+shelf = shelve.open("./shelfs/filtered_networks_abide")
+shelf["data"]["abide"]["patient"] = data["abide"]["patient"]
 shelf.close()
