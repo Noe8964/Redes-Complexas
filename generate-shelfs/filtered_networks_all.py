@@ -14,8 +14,8 @@ shelf = shelve.open("./shelfs/ratios")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-for data_set in ["abide" ]:
-    for type in ["control"]:
+for data_set in ["abide"]:
+    for type in ["patient"]:
         base_path = "./data/" + data_set + "/" + type + "/"
         for subject in os.listdir(base_path):
             subject_path = base_path + "/" + subject + "/"
@@ -29,6 +29,6 @@ for data_set in ["abide" ]:
                     data[data_set][type].append(subject_filtered_networks)
                     break
 
-shelf = shelve.open("./shelfs/filtered_networks_all")
+shelf = shelve.open("./shelfs/filtered_networks_abide_patient")
 shelf["data"] = data
 shelf.close()
