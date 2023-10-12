@@ -21,7 +21,24 @@ for data_set in ["ppmi"]:
         for bin in range(117):
             hists_mean[data_set][type][bin] /= n
 
-plt.hist(hists_mean["ppmi"]["control"], label="control")
-plt.hist(hists_mean["ppmi"]["patient"], label="patient")
-plt.legend()
-plt.show()
+N = min(len(hists["ppmi"]["control"]), len(hists["ppmi"]["patient"]))
+
+for i in range(N):
+    for type in ["control", "patient"]:
+        n = len(hists["ppmi"][type][i])
+
+        print(len(hists["ppmi"][type][i]))
+        print(hists["ppmi"][type][i])
+
+        Pk = []
+        for v in hists["ppmi"][type][i]:
+            Pk.append(v/n)
+
+        plt.bar(range(n), Pk, label=type)
+    plt.legend()
+    plt.show()
+
+#plt.bar(range(117), Pk, label="control")
+#plt.bar(range(117), Pk, label="patient")
+#plt.legend()
+#plt.show()

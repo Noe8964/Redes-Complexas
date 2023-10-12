@@ -18,6 +18,6 @@ for data_set in ["abide"]:
                     data[data_set][type].append(nx.Graph(scipy.io.loadmat(subject_path + file)["data"]))
                     break
 
-file = shelve.open("./shelfs/abide_subjects")
+file = shelve.open("./shelfs/abide_networks")
 file["data"] = data
 file.close()
