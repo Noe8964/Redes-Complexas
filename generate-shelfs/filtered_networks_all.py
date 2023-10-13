@@ -14,7 +14,10 @@ shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-for data_set in ["ppmi"]:
+wot = "ppmi"
+wat = ""
+
+for data_set in [wot]:
     for type in ["control", "patient"]:
         base_path = "./data/" + data_set + "/" + type + "/"
         for subject in os.listdir(base_path):
@@ -27,8 +30,9 @@ for data_set in ["ppmi"]:
                     for threshold in thresholds:
                         subject_filtered_networks.append(nx.from_pandas_adjacency(aux.apply(lambda x : np.where(x < threshold, 0, x))))
                     data[data_set][type].append(subject_filtered_networks)
+                    del aux
                     break
 
-shelf = shelve.open("./shelfs/filtered_networks_ppmi")
+shelf = shelve.open("./shelfs/filtered_networks_" + wot)
 shelf["data"] = data
 shelf.close()

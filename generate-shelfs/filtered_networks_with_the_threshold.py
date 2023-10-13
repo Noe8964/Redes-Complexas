@@ -14,10 +14,10 @@ shelf = shelve.open("./shelfs/global")
 the_threshold = shelf["the_threshold"]
 shelf.close()
 
-wot = "ppmi"
+wot = "abide"
 
 for data_set in [wot]:
-    for type in ["control", "patient"]:
+    for type in ["control"]:
         base_path = "./data/" + data_set + "/" + type + "/"
         for subject in os.listdir(base_path):
             subject_path = base_path + "/" + subject + "/"
