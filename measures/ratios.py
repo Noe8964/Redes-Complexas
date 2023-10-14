@@ -3,7 +3,7 @@ import networkx as nx
 
 ratios = {"control": [], "patient": []}
 
-wot = "abide"
+wot = "ppmi"
 
 if wot == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
@@ -42,7 +42,7 @@ elif wot == "ppmi":
             for network in subject:
                 network_giant_component = network.subgraph(sorted(nx.connected_components(network), key=len, reverse=True)[0])
                 subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
-        ratios[type].append(subject_ratios)
+            ratios[type].append(subject_ratios)
 
 shelf = shelve.open("./shelfs/ratios_" + wot)
 shelf["data"] = ratios
