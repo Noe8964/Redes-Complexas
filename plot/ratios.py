@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-wot = "ppmi"
+wot = "abide"
 
 shelf = shelve.open("./shelfs/ratios_" + wot)
 ratios = shelf["data"]
@@ -14,10 +14,7 @@ thresholds = shelf["thresholds"]
 shelf.close()
 
 
-
-
-""" n = min(len(ratios["control"]), len(ratios["patient"]))
-print(n)
+n = min(len(ratios["control"]), len(ratios["patient"]))
 data_frame_min = {"threshold": thresholds.tolist()*n, "control": [], "patient": []}
 for type in ["control", "patient"]:
     for i in range(n):
@@ -27,11 +24,11 @@ df_min = pd.DataFrame(data_frame_min)
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df_min, x="threshold", y="control")
 sns.lineplot(data=df_min, x="threshold", y="patient")
-plt.savefig("./images/ratios_" + wot + "_min" + ".png")
-plt.show() """
+plt.savefig("./images/ratios/" + wot + "_min" + ".png")
+plt.show()
 
 
-data_frame_control = {"threshold": thresholds.tolist()*len(ratios["control"]), "data": []}
+""" data_frame_control = {"threshold": thresholds.tolist()*len(ratios["control"]), "data": []}
 data_frame_patient = {"threshold": thresholds.tolist()*len(ratios["patient"]), "data": []}
 for i in range(len(ratios["control"])):
     data_frame_control["data"] += ratios["control"][i]
@@ -43,14 +40,5 @@ df_patient = pd.DataFrame(data_frame_patient)
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df_control, x="threshold", y="data")
 sns.lineplot(data=df_patient, x="threshold", y="data")
-plt.savefig("./images/ratios_" + wot + "_nmin" + ".png")
-plt.show()
-
-#plt.plot(thresholds, ratios["control"][0], marker="o", label="control")
-#plt.plot(thresholds, ratios["patient"][0], marker="o", label="patient")
-#plt.legend()
-#plt.xlabel("threshold")
-#plt.ylabel("fraction of nodes in giant component")
-#plt.title("ratios_" + wot)
-#plt.savefig("./images/ratios_" + wot + ".png")
-#plt.show()
+plt.savefig("./images/ratios/" + wot + "_nmin" + ".png")
+plt.show() """

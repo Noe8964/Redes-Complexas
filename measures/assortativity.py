@@ -1,28 +1,46 @@
 import shelve
 import networkx as nx
 
+assortativities = {"control": [], "patient": []}
+
 wot = "ppmi"
 
-shelf = shelve.open("./shelfs/filtered_networks_with_the_threshold_" + wot)
-networks = shelf["data"]
-shelf.close()
+if wot == "abide":
+    shelf = shelve.open("./shelfs/filtered_networks_abide_control")
+    filtered_networks_abide_control = shelf["data"]
+    shelf.close()
 
-mean = {"abide":    {"control": 0.0, "patient": 0.0}, 
-        "neurocon": {"control": 0.0, "patient": 0.0}, 
-        "ppmi":     {"control": 0.0, "patient": 0.0}, 
-        "taowu":    {"control": 0.0, "patient": 0.0}}
+    for subject in filtered_networks_abide_control["abide"]["control"]:
+        subject_assortativies = []
+        for network in subject:
+            subject_assortativies.append(nx.degree_assortativity_coefficient(network))
+        assortativities["control"].append(subject_assortativies)
 
-n = min(len(networks[wot]["control"]), len(networks[wot]["patient"]))
+    del filtered_networks_abide_control
 
-for data_set in [wot]:
-    for i in range(n):
-        for type in ["control", "patient"]:
-            mean[data_set][type] += nx.degree_pearson_correlation_coefficient(networks[data_set][type][i])
+    shelf = shelve.open("./shelfs/filtered_networks_abide_patient")
+    filtered_networks_abide_patient = shelf["data"]
+    shelf.close()
 
-for data_set in [wot]:
+    for subject in filtered_networks_abide_patient["abide"]["patient"]:
+        subject_assortativies = []
+        for network in subject:
+            subject_assortativies.append(nx.degree_assortativity_coefficient(network))
+        assortativities["patient"].append(subject_assortativies)
+
+    del filtered_networks_abide_patient
+elif wot == "ppmi":
+    shelf = shelve.open("./shelfs/filtered_networks_ppmi")
+    filtered_networks = shelf["data"]
+    shelf.close()
+
     for type in ["control", "patient"]:
-        mean[data_set][type] /= n
+        for subject in filtered_networks["ppmi"][type]:
+            subject_assortativies = []
+            for network in subject:
+                subject_assortativies.append(nx.degree_assortativity_coefficient(network))
+            assortativities[type].append(subject_assortativies)
 
-
-print(mean[wot]["control"])
-print(mean[wot]["patient"])
+shelf = shelve.open("./shelfs/assortativities_" + wot)
+shelf["data"] = assortativities
+shelf.close()

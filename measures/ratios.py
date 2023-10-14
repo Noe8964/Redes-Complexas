@@ -3,7 +3,7 @@ import networkx as nx
 
 ratios = {"control": [], "patient": []}
 
-wot = "ppmi"
+wot = "abide"
 
 if wot == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
