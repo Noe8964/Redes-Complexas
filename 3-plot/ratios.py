@@ -3,10 +3,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-wot = "ppmi"
+from_data_set = "ppmi"
 _min = "min"
 
-shelf = shelve.open("./shelfs/ratios_" + wot)
+shelf = shelve.open("./shelfs/ratios_" + from_data_set)
 ratios = shelf["data"]
 shelf.close()
 
@@ -37,10 +37,10 @@ df = {"control": pd.DataFrame(data_frame_creator["control"]),
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df["control"], x="threshold", y="data")
 sns.lineplot(data=df["patient"], x="threshold", y="data")
-plt.savefig("./images/ratios/" + wot + "_" + _min + ".png")
+plt.savefig("./images/ratios/" + from_data_set + "_" + _min + ".png")
 plt.show()
 
-shelf = shelve.open("./shelfs/data_frame_ratios_" + _min + "_" + wot)
+shelf = shelve.open("./shelfs/data_frame_ratios_" + _min + "_" + from_data_set)
 shelf["data"] = df
 shelf.close()
 

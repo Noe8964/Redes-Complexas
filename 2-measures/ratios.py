@@ -1,21 +1,21 @@
 import shelve
 import networkx as nx
 
-max_k_core_sizes = {"control": [], "patient": []}
+ratios = {"control": [], "patient": []}
 
-wot = "ppmi"
+from_data_set = "abide"
 
-if wot == "abide":
+if from_data_set == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
     filtered_networks_abide_control = shelf["data"]
     shelf.close()
 
     for subject in filtered_networks_abide_control["abide"]["control"]:
-        subject_max_k_core_sizes = []
+        subject_ratios = []
         for network in subject:
             network_giant_component = network.subgraph(sorted(nx.connected_components(network), key=len, reverse=True)[0])
-            subject_max_k_core_sizes.append(len(network_giant_component.nodes())/len(network.nodes()))
-        max_k_core_sizes["control"].append(subject_max_k_core_sizes)
+            subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
+        ratios["control"].append(subject_ratios)
 
     del filtered_networks_abide_control
 
@@ -24,26 +24,26 @@ if wot == "abide":
     shelf.close()
 
     for subject in filtered_networks_abide_patient["abide"]["patient"]:
-        subject_max_k_core_sizes = []
+        subject_ratios = []
         for network in subject:
             network_giant_component = network.subgraph(sorted(nx.connected_components(network), key=len, reverse=True)[0])
-            subject_max_k_core_sizes.append(len(network_giant_component.nodes())/len(network.nodes()))
-        max_k_core_sizes["patient"].append(subject_max_k_core_sizes)
+            subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
+        ratios["patient"].append(subject_ratios)
 
     del filtered_networks_abide_patient
-elif wot == "ppmi":
+elif from_data_set == "ppmi":
     shelf = shelve.open("./shelfs/filtered_networks_ppmi")
     filtered_networks = shelf["data"]
     shelf.close()
 
     for type in ["control", "patient"]:
         for subject in filtered_networks["ppmi"][type]:
-            subject_max_k_core_sizes = []
+            subject_ratios = []
             for network in subject:
-                subject_max_k_core_sizes.append(len(nx.k_core(G=network, k=max(nx.core_number(network))).nodes()))
-            max_k_core_sizes[type].append(subject_max_k_core_sizes)
-            
+                network_giant_component = network.subgraph(sorted(nx.connected_components(network), key=len, reverse=True)[0])
+                subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
+            ratios[type].append(subject_ratios)
 
-shelf = shelve.open("./shelfs/max_k_core_sizes_" + wot)
-shelf["data"] = max_k_core_sizes
+shelf = shelve.open("./shelfs/ratios_" + from_data_set)
+shelf["data"] = ratios
 shelf.close()

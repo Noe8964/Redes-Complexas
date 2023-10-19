@@ -3,9 +3,9 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-wot = "ppmi"
+from_data_set = "ppmi"
 
-shelf = shelve.open("./shelfs/average_degrees_" + wot)
+shelf = shelve.open("./shelfs/average_degrees_" + from_data_set)
 average_degrees = shelf["data"]
 shelf.close()
 
@@ -24,7 +24,7 @@ df_min = pd.DataFrame(data_frame_min)
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df_min, x="threshold", y="control")
 sns.lineplot(data=df_min, x="threshold", y="patient")
-plt.savefig("./images/average_degrees/" + wot + "_min" + ".png")
+plt.savefig("./images/average_degrees/" + from_data_set + "_min" + ".png")
 plt.show()
 
 
@@ -40,5 +40,5 @@ df_patient = pd.DataFrame(data_frame_patient)
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df_control, x="threshold", y="data")
 sns.lineplot(data=df_patient, x="threshold", y="data")
-plt.savefig("./images/average_degrees/" + wot + "_nmin" + ".png")
+plt.savefig("./images/average_degrees/" + from_data_set + "_nmin" + ".png")
 plt.show() """

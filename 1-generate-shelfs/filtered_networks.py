@@ -14,11 +14,14 @@ shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-wot = "ppmi"
-wat = ""
+from_data_set = "ppmi"
 
-for data_set in [wot]:
-    for type in ["control", "patient"]:
+control = ["control"]
+patient = ["patient"]
+both    = ["control", "patient"]
+
+for data_set in [from_data_set]:
+    for type in both:
         base_path = "./data/" + data_set + "/" + type + "/"
         for subject in os.listdir(base_path):
             subject_path = base_path + "/" + subject + "/"
@@ -33,6 +36,6 @@ for data_set in [wot]:
                     del aux
                     break
 
-shelf = shelve.open("./shelfs/filtered_networks_" + wot)
+shelf = shelve.open("./shelfs/filtered_networks_" + from_data_set)
 shelf["data"] = data
 shelf.close()

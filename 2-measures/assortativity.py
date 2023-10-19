@@ -3,9 +3,9 @@ import networkx as nx
 
 assortativities = {"control": [], "patient": []}
 
-wot = "abide"
+from_data_set = "ppmi"
 
-if wot == "abide":
+if from_data_set == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
     filtered_networks_abide_control = shelf["data"]
     shelf.close()
@@ -29,7 +29,7 @@ if wot == "abide":
         assortativities["patient"].append(subject_assortativies)
 
     del filtered_networks_abide_patient
-elif wot == "ppmi":
+elif from_data_set == "ppmi":
     shelf = shelve.open("./shelfs/filtered_networks_ppmi")
     filtered_networks = shelf["data"]
     shelf.close()
@@ -41,6 +41,6 @@ elif wot == "ppmi":
                 subject_assortativies.append(nx.degree_assortativity_coefficient(network))
             assortativities[type].append(subject_assortativies)
 
-shelf = shelve.open("./shelfs/assortativities_" + wot)
+shelf = shelve.open("./shelfs/assortativities_" + from_data_set)
 shelf["data"] = assortativities
 shelf.close()

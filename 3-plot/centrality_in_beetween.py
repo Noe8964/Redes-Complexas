@@ -3,8 +3,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-wot = "ppmi"
-shelf = shelve.open("./shelfs/Centrality_in_beetween_" + wot)
+from_data_set = "ppmi"
+shelf = shelve.open("./shelfs/Centrality_in_beetween_" + from_data_set)
 centrality=shelf["data"] 
 shelf.close()
 
@@ -24,5 +24,5 @@ df_min = pd.DataFrame(data_frame_min)
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df_min, x="threshold", y="control")
 sns.lineplot(data=df_min, x="threshold", y="patient")
-plt.savefig("./images/Centrality/" + wot + "beetwenn_min" + ".png")
+plt.savefig("./images/Centrality/" + from_data_set + "beetwenn_min" + ".png")
 plt.show()

@@ -3,10 +3,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-wot = "ppmi"
+from_data_set = "ppmi"
 _min = "min"
 
-shelf = shelve.open("./shelfs/data_frame_ratios_" + _min + "_" + wot)
+shelf = shelve.open("./shelfs/data_frame_ratios_" + _min + "_" + from_data_set)
 df = shelf["data"]
 shelf.close()
 
@@ -45,6 +45,6 @@ plt.xlabel("fraction of giant component")
 plt.ylabel("probability of being control or patient")
 plt.show()
 
-shelf = shelve.open("./shelfs/probability_" + wot + "_ratios")
+shelf = shelve.open("./shelfs/probability_" + from_data_set + "_ratios")
 shelf["data"] = to_plot
 shelf.close()

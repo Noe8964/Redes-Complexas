@@ -1,9 +1,10 @@
 import shelve
 import networkx as nx
+import numpy as np
 centrality = {"control": [], "patient": []}
 
-wot = "ppmi"
-if wot == "abide":
+from_data_set = "ppmi"
+if from_data_set == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
     filtered_networks_abide_control = shelf["data"]
     shelf.close()
@@ -23,27 +24,27 @@ if wot == "abide":
     for subject in filtered_networks_abide_patient["abide"]["patient"]:
         ssubject_centrality = []
         for network in subject:
-                nodes_centrality=nx.betweenness_centrality(network)
+                nodes_centrality=nx.closeness_centrality(network)
                 print(sum(nodes_centrality)/len(nodes_centrality))
                 subject_centrality.append(sum(nodes_centrality)/len(nodes_centrality))
         centrality["patient"].append(subject_centrality)
 
     del filtered_networks_abide_patient
-elif wot == "ppmi":
+elif from_data_set == "ppmi":
     shelf = shelve.open("./shelfs/filtered_networks_ppmi")
     filtered_networks = shelf["data"]
     shelf.close()
-
+    
     for type in ["control", "patient"]:
         for subject in filtered_networks["ppmi"][type]:
             subject_centrality = []
             for network in subject:
-                nodes_centrality=nx.eigenvector_centrality(network,max_iter=10000)
+                nodes_centrality=nx.closeness_centrality(network)
                 subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
-            centrality[type].append(subject_centrality) 
+            centrality[type].append(subject_centrality)   
         print(centrality[type])
-        print(len(centrality[type]))
-
-shelf = shelve.open("./shelfs/Eigen_centrality_" + wot)
+        print(len(centrality[type]))     
+shelf = shelve.open("./shelfs/closseness_centrality_" + from_data_set)
 shelf["data"] = centrality
-shelf.close()
+shelf.close()                          
+

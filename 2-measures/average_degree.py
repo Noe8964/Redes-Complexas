@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 average_degrees = {"control": [], "patient": []}
 
-wot = "ppmi"
+from_data_set = "ppmi"
 
-if wot == "abide":
+if from_data_set == "abide":
     shelf = shelve.open("./shelfs/filtered_networks_abide_control")
     filtered_networks_abide_control = shelf["data"]
     shelf.close()
@@ -38,7 +38,7 @@ if wot == "abide":
         average_degrees["patient"].append(subject_average_degrees)
 
     del filtered_networks_abide_patient
-elif wot == "ppmi":
+elif from_data_set == "ppmi":
     shelf = shelve.open("./shelfs/filtered_networks_ppmi")
     filtered_networks = shelf["data"]
     shelf.close()
@@ -54,6 +54,6 @@ elif wot == "ppmi":
                 subject_average_degrees.append(average)
             average_degrees[type].append(subject_average_degrees)
 
-shelf = shelve.open("./shelfs/average_degrees_" + wot)
+shelf = shelve.open("./shelfs/average_degrees_" + from_data_set)
 shelf["data"] = average_degrees
 shelf.close()
