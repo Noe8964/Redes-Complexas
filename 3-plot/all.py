@@ -7,10 +7,11 @@ shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-measures = "assortativities", "average_degrees", "betweeness_centrality", "closeness_centrality", "eigen_centrality", "max_k_core_sizes", "ratios"
+measures = ["assortativities", "average_degrees", "betweeness_centrality", "closeness_centrality", "eigen_centrality", "max_k_core_sizes", "ratios"]
+
 
 for from_data_set in ["ppmi"]:
-    for measure in ["closeness_centrality", "eigen_centrality"]:
+    for measure in ["assortativities", "average_degrees", "max_k_core_sizes", "ratios"]:
         shelf = shelve.open("./shelfs/" + measure + "_" + from_data_set)
         measure_data = shelf["data"]
         shelf.close()
@@ -33,15 +34,6 @@ for from_data_set in ["ppmi"]:
                     for type in ["control", "patient"]:
                         for i in range(len(measure_data[type])):
                             data_frame_creator[type]["data"] += measure_data[type][i]
-
-            print(from_data_set)
-            print(measure)
-            print(subjects_min)
-            print()
-            print(len(data_frame_creator["control"]["data"]))
-            print(len(data_frame_creator["patient"]["data"]))
-
-            quit()
 
             df = {"control": pd.DataFrame(data_frame_creator["control"]),
                   "patient": pd.DataFrame(data_frame_creator["patient"])}
