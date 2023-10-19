@@ -31,14 +31,13 @@ else:
         for i in range(len(ratios[type])):
             data_frame_creator[type]["data"] += ratios[type][i]
 
-
 df = {"control": pd.DataFrame(data_frame_creator["control"]),
       "patient": pd.DataFrame(data_frame_creator["patient"])}
 
 sns.set_theme(style="darkgrid")
 sns.lineplot(data=df["control"], x="threshold", y="data")
 sns.lineplot(data=df["patient"], x="threshold", y="data")
-plt.savefig("./images/ratios/" + wot + "_min" + ".png")
+plt.savefig("./images/ratios/" + wot + "_" + _min + ".png")
 plt.show()
 
 shelf = shelve.open("./shelfs/data_frame_ratios_" + _min + "_" + wot)

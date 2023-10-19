@@ -12,7 +12,7 @@ patient = pd.DataFrame(scipy.io.loadmat("./data/abide/patient/sub-patient50002/s
 control = control.apply(lambda x : np.where(x == 1, 0, x))
 patient = patient.apply(lambda x : np.where(x == 1, 0, x))
 
-shelf = shelve.open("./shelfs/ratios")
+shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
