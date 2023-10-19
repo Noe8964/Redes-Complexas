@@ -25,7 +25,7 @@ if wot == "abide":
     for subject in filtered_networks_abide_patient["abide"]["patient"]:
         ssubject_centrality = []
         for network in subject:
-                nnodes_centrality=nx.closeness_centrality(network)
+                nodes_centrality=nx.closeness_centrality(network)
                 subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
         centrality["patient"].append(subject_centrality)
 
