@@ -1,5 +1,6 @@
 import shelve
 import networkx as nx
+import numpy as np
 centrality = {"control": [], "patient": []}
 
 wot = "abide"
@@ -11,8 +12,8 @@ if wot == "abide":
     for subject in filtered_networks_abide_control["abide"]["control"]:
         subject_centrality = []
         for network in subject:
-            nodes_centrality=nx.betweenness_centrality(network)
-            subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
+                nodes_centrality=nx.closeness_centrality(network)
+                subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
         centrality["control"].append(subject_centrality)
 
     del filtered_networks_abide_control
@@ -24,7 +25,7 @@ if wot == "abide":
     for subject in filtered_networks_abide_patient["abide"]["patient"]:
         ssubject_centrality = []
         for network in subject:
-                nodes_centrality=nx.betweenness_centrality(network)
+                nnodes_centrality=nx.closeness_centrality(network)
                 subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
         centrality["patient"].append(subject_centrality)
 
@@ -38,11 +39,12 @@ elif wot == "ppmi":
         for subject in filtered_networks["ppmi"][type]:
             subject_centrality = []
             for network in subject:
-                nodes_centrality=nx.betweenness_centrality(network)
+                nodes_centrality=nx.closeness_centrality(network)
                 subject_centrality.append(sum(list(nodes_centrality.values()))/len(nodes_centrality))
-            centrality[type].append(subject_centrality) 
+            centrality[type].append(subject_centrality)   
         print(centrality[type])
-        print(len(centrality[type]))
-shelf = shelve.open("./shelfs/Centrality_in_beetween_" + wot)
+        print(len(centrality[type]))     
+shelf = shelve.open("./shelfs/closseness_centrality_" + wot)
 shelf["data"] = centrality
-shelf.close()
+shelf.close()                          
+
