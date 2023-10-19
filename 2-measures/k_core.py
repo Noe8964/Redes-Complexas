@@ -1,9 +1,9 @@
 import shelve
 import networkx as nx
 
-max_k_core_sizes = {"control": [], "patient": []}
-
 for from_data_set in ["abide", "ppmi"]:
+    max_k_core_sizes = {"control": [], "patient": []}
+
     if from_data_set == "abide":
         shelf = shelve.open("./shelfs/filtered_networks_abide_control")
         filtered_networks_abide_control = shelf["data"]
@@ -42,6 +42,8 @@ for from_data_set in ["abide", "ppmi"]:
                     subject_max_k_core_sizes.append(len(nx.k_core(G=network, k=max(nx.core_number(network))).nodes()))
                 max_k_core_sizes[type].append(subject_max_k_core_sizes)
 
-    shelf = shelve.open("./shelfs/max_k_core_sizes_" + from_data_set)
+    shelf = shelve.open("./shelfs/k_core_" + from_data_set)
     shelf["data"] = max_k_core_sizes
     shelf.close()
+
+    del max_k_core_sizes

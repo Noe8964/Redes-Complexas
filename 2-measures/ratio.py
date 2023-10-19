@@ -1,9 +1,9 @@
 import shelve
 import networkx as nx
 
-ratios = {"control": [], "patient": []}
-
 for from_data_set in ["abide", "ppmi"]:
+    ratios = {"control": [], "patient": []}
+    
     if from_data_set == "abide":
         shelf = shelve.open("./shelfs/filtered_networks_abide_control")
         filtered_networks_abide_control = shelf["data"]
@@ -43,6 +43,8 @@ for from_data_set in ["abide", "ppmi"]:
                     subject_ratios.append(len(network_giant_component.nodes())/len(network.nodes()))
                 ratios[type].append(subject_ratios)
 
-    shelf = shelve.open("./shelfs/ratios_" + from_data_set)
+    shelf = shelve.open("./shelfs/ratio_" + from_data_set)
     shelf["data"] = ratios
     shelf.close()
+
+    del ratios
