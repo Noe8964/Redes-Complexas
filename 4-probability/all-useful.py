@@ -88,5 +88,6 @@ for from_data_set in data_sets:
                 plt.ylabel("count")
                 plt.savefig(f"./useful/{title}.png")
                 #plt.show()
+                plt.close()
         
                 del df
