@@ -103,12 +103,12 @@ for from_data_set in data_sets:
         
         del measure_data
         
-        # remove nan
+        # handle nan
         if measure == "assortativity":
             for type in ["control", "patient"]:
                 for i in range(len(wanted_measure_data[type])):
                     if math.isnan(wanted_measure_data[type][i]):
-                        wanted_measure_data[type][i] = 0
+                        wanted_measure_data[type][i] = -1
 
         X = wanted_measure_data["control"] + wanted_measure_data["patient"]     
         y = [0]*len(wanted_measure_data["control"]) + [1]*len(wanted_measure_data["patient"])

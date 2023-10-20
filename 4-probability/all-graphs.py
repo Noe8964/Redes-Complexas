@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import functools
 
 
 all_data_sets = [
@@ -31,6 +32,12 @@ data_sets = [
 
 measures = [
     "assortativity",
+    "average_degree",
+    "betweeness_centrality",
+    "closeness_centrality",
+    "eigen_centrality",
+    "k_core",
+    "ratio",
 ]
 
 shelf = shelve.open("./shelfs/global")
@@ -62,21 +69,83 @@ for from_data_set in data_sets:
             
             match measure:
                 case "assortativity":
-                    for type in ["patient"]:
+                    for type in ["control", "patient"]:
                         for usefulness in ["useful", "useless"]:
                             G = subject[type][usefulness]
                             degrees = [x[1] for x in G.degree()]
-                            scaled = [x * 10 for x in degrees]
+                            scaled = [x * 1 for x in degrees]
                             
                             title = f"{from_data_set} - {measure} - {type} - {usefulness} threshold of value "
                             if usefulness == "useful":
                                 title += str(the_thresholds[from_data_set][measure])
                             else:
-                                title += str(the_useless_thresholds[from_data_set][measures])
+                                title += str(the_useless_thresholds[from_data_set][measure])
                                  
                             plt.title(title)
                             nx.draw(G, node_size=scaled)
-                            plt.show()
+                            plt.savefig(f"./graphs/{title}.png")
+                            plt.close()
+                case "betweeness_centrality" | "closeness_centrality" | "eigen_centrality":
+                    match measure:
+                        case "betweeness_centrality":
+                            f = nx.betweenness_centrality
+                        case "closeness_centrality":
+                            f = nx.closeness_centrality
+                        case "eigen_centrality":
+                            f = functools.partial(nx.eigenvector_centrality, max_iter=10000)
+
+                    for type in ["control", "patient"]:
+                        for usefulness in ["useful", "useless"]:
+                            G = subject[type][usefulness]
+                            centrality = f(G)
+                            scaled = [x * 100 for x in list(centrality.values())]
+                            
+                            title = f"{from_data_set} - {measure} - {type} - {usefulness} threshold of value "
+                            if usefulness == "useful":
+                                title += str(the_thresholds[from_data_set][measure])
+                            else:
+                                title += str(the_useless_thresholds[from_data_set][measure])
+
+                            plt.title(title)
+                            nx.draw(G, node_size=scaled)
+                            plt.savefig(f"./graphs/{title}.png")
+                            plt.close()
+                case "k_core":
+                    for type in ["control", "patient"]:
+                        for usefulness in ["useful", "useless"]:
+                            G = subject[type][usefulness]
+                            max_k_core = nx.k_core(G=G, k=max(nx.core_number(G)))
+                            
+                            title = f"{from_data_set} - {measure} - {type} - {usefulness} threshold of value "
+                            if usefulness == "useful":
+                                title += str(the_thresholds[from_data_set][measure])
+                            else:
+                                title += str(the_useless_thresholds[from_data_set][measure])
+                                 
+                            plt.title(title)
+                            nx.draw(G)
+                            nx.draw(max_k_core, node_color="red")
+                            plt.savefig(f"./graphs/{title}.png")
+                            plt.close()
+                case "ratio":
+                    for type in ["control", "patient"]:
+                        for usefulness in ["useful", "useless"]:
+                            G = subject[type][usefulness]
+                            giant_component = G.subgraph(sorted(nx.connected_components(G), key=len, reverse=True)[0])                            
+                            
+                            title = f"{from_data_set} - {measure} - {type} - {usefulness} threshold of value "
+                            if usefulness == "useful":
+                                title += str(the_thresholds[from_data_set][measure])
+                            else:
+                                title += str(the_useless_thresholds[from_data_set][measure])
+                                 
+                            plt.title(title)
+                            nx.draw(G, node_size=5)
+                            nx.draw(giant_component, node_color="red", node_size=5)
+                            plt.savefig(f"./graphs/{title}.png")
+                            plt.close()
+
+                      
                           
         del networks
                           
