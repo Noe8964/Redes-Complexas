@@ -17,12 +17,30 @@ all_measures = [
     "ratio",
 ]
 
-measures = [
-    "eigen_centrality",
+all_data_sets = [
+    "abide",
+    "neurocon",
+    "ppmi",
+    "taowu",
 ]
 
-for from_data_set in ["abide", "ppmi"]:
-    for measure in all_measures:
+data_sets = [
+    "neurocon",
+    "taowu",
+]
+
+measures = [
+    "assortativity",
+    "average_degree",
+    "betweeness_centrality",
+    "closeness_centrality",
+    "eigen_centrality",
+    "k_core",
+    "ratio",
+]
+
+for from_data_set in data_sets:
+    for measure in measures:
         shelf = shelve.open("./shelfs/" + measure + "_" + from_data_set)
         measure_data = shelf["data"]
         shelf.close()

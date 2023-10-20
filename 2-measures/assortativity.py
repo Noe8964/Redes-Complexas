@@ -1,7 +1,19 @@
 import shelve
 import networkx as nx
 
-for from_data_set in ["abide", "ppmi"]:
+all_data_sets = [
+    "abide",
+    "neurocon",
+    "ppmi",
+    "taowu",
+]
+
+data_sets = [
+    "neurocon",
+    "taowu",
+]
+
+for from_data_set in data_sets:
     assortativity = {"control": [], "patient": []}
     
     if from_data_set == "abide":
@@ -28,17 +40,19 @@ for from_data_set in ["abide", "ppmi"]:
             assortativity["patient"].append(subject_assortativies)
 
         del filtered_networks_abide_patient
-    elif from_data_set == "ppmi":
-        shelf = shelve.open("./shelfs/filtered_networks_ppmi")
+    else:
+        shelf = shelve.open("./shelfs/filtered_networks_" + from_data_set)
         filtered_networks = shelf["data"]
         shelf.close()
 
         for type in ["control", "patient"]:
-            for subject in filtered_networks["ppmi"][type]:
+            for subject in filtered_networks[from_data_set][type]:
                 subject_assortativies = []
                 for network in subject:
                     subject_assortativies.append(nx.degree_assortativity_coefficient(network))
                 assortativity[type].append(subject_assortativies)
+        
+        del filtered_networks
 
     shelf = shelve.open("./shelfs/assortativity_" + from_data_set)
     shelf["data"] = assortativity

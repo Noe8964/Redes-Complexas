@@ -9,6 +9,46 @@ shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"].tolist()
 shelf.close()
 
+accuracy = {
+    "abide": {
+        "assortativity": 0,
+        "average_degree": 0,
+        "betweeness_centrality": 0,
+        "closeness_centrality": 0,
+        "eigen_centrality": 0,
+        "k_core": 0,
+        "ratio": 0,
+    },
+    "neurocon": {
+        "assortativity": 0,
+        "average_degree": 0,
+        "betweeness_centrality": 0,
+        "closeness_centrality": 0,
+        "eigen_centrality": 0,
+        "k_core": 0,
+        "ratio": 0,
+    },
+    
+    "ppmi": {
+        "assortativity": 0,
+        "average_degree":  0,
+        "betweeness_centrality": 0,
+        "closeness_centrality": 0,
+        "eigen_centrality": 0,
+        "k_core": 0,
+        "ratio": 0,
+    },
+    "taowu": {
+        "assortativity": 0,
+        "average_degree": 0,
+        "betweeness_centrality": 0,
+        "closeness_centrality": 0,
+        "eigen_centrality": 0,
+        "k_core": 0,
+        "ratio": 0,
+    },
+}
+
 all_measures = [
     "assortativity",
     "average_degree",
@@ -17,6 +57,13 @@ all_measures = [
     "eigen_centrality",
     "k_core",
     "ratio",
+]
+
+all_data_sets = [
+    "abide",
+    "neurocon",
+    "ppmi",
+    "taowu",
 ]
 
 measures = [
@@ -29,32 +76,18 @@ measures = [
     "ratio",
 ]
 
-accuracy = {
-    "abide": {
-        "assortativity": 0,
-        "average_degree": 0,
-        "betweeness_centrality": 0,
-        "closeness_centrality": 0,
-        "eigen_centrality": 0,
-        "k_core": 0,
-        "ratio": 0,
-    },
-    "ppmi": {
-        "assortativity": 0,
-        "average_degree":  0,
-        "betweeness_centrality": 0,
-        "closeness_centrality": 0,
-        "eigen_centrality": 0,
-        "k_core": 0,
-        "ratio": 0,
-    },
-}
+data_sets = [
+    "abide",
+    "neurocon",
+    "ppmi",
+    "taowu",
+]
 
 shelf = shelve.open("./shelfs/the_thresholds")
 the_thresholds = shelf["data"]
 shelf.close()
 
-for from_data_set in ["abide", "ppmi"]:
+for from_data_set in data_sets:
     for measure in measures:
         shelf = shelve.open("./shelfs/" + measure + "_" + from_data_set)
         measure_data = shelf["data"]
@@ -73,7 +106,9 @@ for from_data_set in ["abide", "ppmi"]:
         # remove nan
         if measure == "assortativity":
             for type in ["control", "patient"]:
-                wanted_measure_data[type] = [x for x in wanted_measure_data[type] if not math.isnan(x)]
+                for i in range(len(wanted_measure_data[type])):
+                    if math.isnan(wanted_measure_data[type][i]):
+                        wanted_measure_data[type][i] = 0
 
         X = wanted_measure_data["control"] + wanted_measure_data["patient"]     
         y = [0]*len(wanted_measure_data["control"]) + [1]*len(wanted_measure_data["patient"])
@@ -88,13 +123,13 @@ for from_data_set in ["abide", "ppmi"]:
 
         y_pred = neigh.predict(X_test)
 
-        accuracy[from_data_set][measure] =  accuracy_score(y_test, y_pred)
+        accuracy[from_data_set][measure] = round(accuracy_score(y_test, y_pred), 2)
 
 shelf = shelve.open("./shelfs/accuracy")
 shelf["data"] = accuracy
 shelf.close()
 
-for from_data_set in ["abide", "ppmi"]:
+for from_data_set in data_sets:
     print(from_data_set)
     for measure in measures:
         print(accuracy[from_data_set][measure])

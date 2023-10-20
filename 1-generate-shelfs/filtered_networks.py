@@ -5,23 +5,29 @@ import pandas as pd
 import numpy as np
 import os
 
-data = {"abide":    {"control": [], "patient": []}, 
-        "neurocon": {"control": [], "patient": []}, 
-        "ppmi":     {"control": [], "patient": []}, 
-        "taowu":    {"control": [], "patient": []}}
-
 shelf = shelve.open("./shelfs/global")
 thresholds = shelf["thresholds"]
 shelf.close()
 
-from_data_set = "ppmi"
+all_data_sets = [
+    "abide",
+    "neurocon",
+    "ppmi",
+    "taowu",
+]
 
-control = ["control"]
-patient = ["patient"]
-both    = ["control", "patient"]
+data_sets = [
+    "neurocon",
+    "taowu",
+]
 
-for data_set in [from_data_set]:
-    for type in both:
+for data_set in data_sets:
+    data = {"abide":    {"control": [], "patient": []}, 
+            "neurocon": {"control": [], "patient": []}, 
+            "ppmi":     {"control": [], "patient": []}, 
+            "taowu":    {"control": [], "patient": []}}
+    
+    for type in ["control", "patient"]:
         base_path = "./data/" + data_set + "/" + type + "/"
         for subject in os.listdir(base_path):
             subject_path = base_path + "/" + subject + "/"
@@ -36,6 +42,8 @@ for data_set in [from_data_set]:
                     del aux
                     break
 
-shelf = shelve.open("./shelfs/filtered_networks_" + from_data_set)
-shelf["data"] = data
-shelf.close()
+    shelf = shelve.open("./shelfs/filtered_networks_" + data_set)
+    shelf["data"] = data
+    shelf.close()
+
+    del data
